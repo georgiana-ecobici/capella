@@ -789,6 +789,7 @@ public class TitleBlockServices {
     }
   }
 
+  
   /**
    * 
    * @param cell
@@ -829,6 +830,7 @@ public class TitleBlockServices {
    *          the expression to be evaluate (ex feature: name, or capella: xyz)
    * @return result after the expression was evaluated
    */
+  // test
   private Object getResultOfExpression(EObject target, String expression) {
     IInterpreterProvider provider = CompoundInterpreter.INSTANCE.getProviderForExpression(expression);
     IInterpreter interpreter = provider.createInterpreter();
