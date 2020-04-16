@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.polarsys.capella.test.search
+Bundle-Version: 1.4.0.qualifier
+Bundle-Activator: org.polarsys.capella.test.search.activator.SearchTestActivator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.search,
+ org.eclipse.core.runtime,
+ org.polarsys.capella.core.ui.search,
+ org.polarsys.capella.test.framework,
+ org.eclipse.egf.pattern;resolution:=optional;visibility:=reexport
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Export-Package: org.polarsys.capella.test.search.testsuites 
