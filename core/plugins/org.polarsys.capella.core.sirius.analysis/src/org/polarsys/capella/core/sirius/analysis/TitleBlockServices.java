@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -34,8 +35,10 @@ import org.eclipse.sirius.diagram.DDiagram;
 import org.eclipse.sirius.diagram.DDiagramElement;
 import org.eclipse.sirius.diagram.DEdge;
 import org.eclipse.sirius.diagram.DNodeContainer;
+import org.eclipse.sirius.diagram.DNodeList;
 import org.eclipse.sirius.diagram.DragAndDropTarget;
 import org.eclipse.sirius.diagram.description.ContainerMapping;
+import org.eclipse.sirius.viewpoint.DRepresentation;
 import org.eclipse.sirius.viewpoint.description.DAnnotation;
 import org.eclipse.sirius.viewpoint.description.DescriptionFactory;
 import org.eclipse.swt.graphics.Image;
@@ -58,12 +61,19 @@ public class TitleBlockServices {
   private static final String DEFAULT_CELL_NAME = "Name";
   private static final String DEFAULT_CELL_CONTENT = "feature:name";
   private static final String INTERPRETER_ERROR = "Interpreter Error: Syntax not valid";
+  private static final String VISIBILITY = "Visibility";
+  private static final String ELEMENT_TITLE_BLOCK = "ElementTitleBlock";
+  private static final String FALSE = "False";
 
   public static TitleBlockServices getService() {
     if (service == null) {
       service = new TitleBlockServices();
     }
     return service;
+  }
+
+  public void test(DDiagram diagram) {
+    System.out.println("A functionat :P");
   }
 
   /**
@@ -300,10 +310,10 @@ public class TitleBlockServices {
     // refresh the diagram title block, so that if preferences have changed, TB is updated
     DAnnotation diagramTitleBlock = TitleBlockHelper.getDiagramTitleBlock(diagram);
     if (diagramTitleBlock != null) {
-      updateDiagramTitleBlock(diagramTitleBlock, (EObject) diagram);
+      updateDiagramTitleBlock(diagramTitleBlock, diagram);
     } else {
       if (TitleBlockPreferencesInitializer.isCreateDiagramTitleBlockByDefault()) {
-        createDiagramTitleBlock((DDiagram) diagram);
+        createDiagramTitleBlock(diagram);
       }
     }
   }
@@ -648,7 +658,7 @@ public class TitleBlockServices {
         wrapperAnnotation.getDetails().put(TitleBlockHelper.CONTENT, object.toString());
       }
     }
-    return (EObject) wrapperAnnotation;
+    return wrapperAnnotation;
   }
 
   /**
@@ -861,4 +871,26 @@ public class TitleBlockServices {
     return resultToValidate;
   }
 
+  public boolean isElementTitleBlockNotVisible(Object elementView) {
+    return isTitleBlockNotVisible(elementView, ELEMENT_TITLE_BLOCK);
+  }
+
+  public boolean isTitleBlockNotVisible(Object elementView, String type) {
+    List<DAnnotation> list = new ArrayList<DAnnotation>();
+    if (elementView instanceof DNodeList) {
+      elementView = ((DNodeList) elementView).eContainer();
+    }
+    if ((elementView instanceof DRepresentation)) {
+      DRepresentation representation = (DRepresentation) elementView;
+      list = representation.getEAnnotations().stream().filter(x -> (x.getSource().equals(type)))
+          .collect(Collectors.toList());
+      if (!list.isEmpty()) {
+        list = list.stream().filter(x -> Objects.nonNull(x.getDetails().get(VISIBILITY)))
+            .filter(x -> x.getDetails().get(VISIBILITY).equals(FALSE)).collect(Collectors.toList());
+      } else {
+        return false;
+      }
+    }
+    return (!list.isEmpty());
+  }
 }
