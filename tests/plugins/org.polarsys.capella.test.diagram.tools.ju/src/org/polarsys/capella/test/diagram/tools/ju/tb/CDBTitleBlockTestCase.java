@@ -24,20 +24,29 @@ public abstract class CDBTitleBlockTestCase extends AbstractTitleBlockTestCase {
 
   @Override
   public void testTitleBlocks() {
+    testDiagramTitleBlock();
+    testElementTitleBlock(classId);
+  }
+
+  public void testDiagramTitleBlock() {
     // create TB tools
     DAnnotation diagramTB = diagram.createDiagramTitleBlock();
-    DAnnotation elementTB = diagram.createElementTitleBlock(classId);
-
-    // show/hide tool + create TB after hide it
-
-    diagram.removeElementTitleBlock(elementTB.getUid());
-    diagram.checkCreateElementTitleBlock(classId);
-    diagram.insertElementTitleBlock(elementTB.getUid());
-
     diagram.removeDiagramTitleBlock(diagramTB.getUid());
     diagram.checkCreateDiagramTitleBlock();
     diagram.insertDiagramTitleBlock(diagramTB.getUid());
-
+    
+    diagram.deleteTitleBlock(diagramTB);
+  }
+  
+  public void testElementTitleBlock(String elementId) {
+    // test create Element Title Block tool
+    DAnnotation elementTB = diagram.createElementTitleBlock(elementId);
+    
+    // show/hide tool + create TB after hide it
+    diagram.removeElementTitleBlock(elementTB.getUid());
+    diagram.checkCreateElementTitleBlock(elementId);
+    diagram.insertElementTitleBlock(elementTB.getUid());
+    
     // insert line/column in TB element
     diagram.insertLineInTitleBlock(elementTB, 0);
     diagram.insertColumnInTitleBlock(elementTB, 0);
@@ -45,9 +54,10 @@ public abstract class CDBTitleBlockTestCase extends AbstractTitleBlockTestCase {
     // remove line/column from TB element
     diagram.removeLineFromTitleBlock(elementTB, 0);
     diagram.removeColumnFromTitleBlock(elementTB, 0);
-
+    
+    diagram.deleteTitleBlock(elementTB);
   }
-
+  
   @Override
   protected CommonDiagram initDiagram() {
     return CDBDiagram.openDiagram(context, diagramName);

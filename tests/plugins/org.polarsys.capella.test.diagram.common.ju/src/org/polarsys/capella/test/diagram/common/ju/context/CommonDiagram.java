@@ -10,7 +10,9 @@
  *******************************************************************************/
 package org.polarsys.capella.test.diagram.common.ju.context;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.sirius.diagram.DDiagram;
 import org.eclipse.sirius.diagram.DDiagramElement;
 import org.eclipse.sirius.diagram.DDiagramElementContainer;
@@ -18,9 +20,11 @@ import org.eclipse.sirius.diagram.DEdge;
 import org.eclipse.sirius.diagram.DNode;
 import org.eclipse.sirius.diagram.DNodeListElement;
 import org.eclipse.sirius.viewpoint.description.DAnnotation;
+import org.polarsys.capella.common.ef.command.AbstractReadWriteCommand;
 import org.polarsys.capella.core.data.capellacore.CapellaElement;
 import org.polarsys.capella.core.sirius.analysis.constants.IDNDToolNameConstants;
 import org.polarsys.capella.core.sirius.analysis.constants.IToolNameConstants;
+import org.polarsys.capella.shared.id.handler.IdManager;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.CreateAbstractDNodeTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.CreateContainerTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.CreateDEdgeTool;
@@ -30,12 +34,15 @@ import org.polarsys.capella.test.diagram.common.ju.step.tools.InsertRemoveTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.SelectTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.CreateDiagramTitleBlockTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.CreateElementTitleBlockTool;
+import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.DeleteTitleBlockTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.InsertColumnInTitleBlockTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.InsertLineInTitleBlockTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.InsertRemoveTitleBlockTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.RemoveColumnFromTitleBlockTool;
 import org.polarsys.capella.test.diagram.common.ju.step.tools.titleblocks.RemoveLineFromTitleBlockTool;
+import org.polarsys.capella.test.diagram.common.ju.wrapper.utils.DiagramHelper;
 import org.polarsys.capella.test.framework.context.SessionContext;
+import org.polarsys.capella.test.framework.helpers.TestHelper;
 
 public class CommonDiagram extends DiagramContext {
   public CommonDiagram(SessionContext context, DDiagram diagram) {
@@ -67,8 +74,10 @@ public class CommonDiagram extends DiagramContext {
   }
 
   public void checkCreateElementTitleBlock(String containerId) {
-    new CreateElementTitleBlockTool(this, IToolNameConstants.TOOL_CREATE_ELEMENT_TITLE_BLOCK, containerId,
-        getDiagramId()).contextOk();
+    CreateElementTitleBlockTool tool = new CreateElementTitleBlockTool(this, IToolNameConstants.TOOL_CREATE_ELEMENT_TITLE_BLOCK, containerId,
+        getDiagramId());
+    tool.contextOk();
+    //tool.run();
   }
 
   public void checkCreateDiagramTitleBlock() {
@@ -114,6 +123,11 @@ public class CommonDiagram extends DiagramContext {
     DDiagramElementContainer createdTB = new RemoveColumnFromTitleBlockTool(this,
         IToolNameConstants.TOOL_REMOVE_COLUMN_TITLE_BLOCK, getDiagramId(), titleBlock, colNo).run();
     return (DAnnotation) createdTB.getTarget();
+  }
+  
+  public void deleteTitleBlock(DAnnotation titleBlock) {
+    DeleteTitleBlockTool delTool = new DeleteTitleBlockTool(this, this, IToolNameConstants.TOOL_DELETE_DIAGRAM_TITLE_BLOCK);
+    delTool.delete(titleBlock);
   }
 
   public void createConstrainedElement(String sourceId, String targetId) {
