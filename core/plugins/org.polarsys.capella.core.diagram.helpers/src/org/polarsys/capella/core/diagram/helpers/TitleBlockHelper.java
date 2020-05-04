@@ -54,7 +54,7 @@ public class TitleBlockHelper {
   public static final String NAME = "Name:";
   public static final String CONTENT = "Content:";
   public static final String DIAGRAM_TITLE_BLOCK = "DiagramTitleBlock";
-  
+
   /**
    * @param titleBlock
    * @return true if the annotation is a Diagram Title Block type annotation
@@ -62,6 +62,7 @@ public class TitleBlockHelper {
   public static boolean isDiagramTitleBlock(DAnnotation titleBlock) {
     return titleBlock.getSource() != null && titleBlock.getSource().equals(DIAGRAM_TITLE_BLOCK);
   }
+
   /**
    * @param titleBlock
    * @return true if the annotation is a Element Title Block type annotation
@@ -69,7 +70,7 @@ public class TitleBlockHelper {
   public static boolean isElementTitleBlock(DAnnotation titleBlock) {
     return titleBlock.getSource() != null && titleBlock.getSource().equals(ELEMENT_TITLE_BLOCK);
   }
-  
+
   /**
    * @param annotation
    * @return true if the annotation is a Title Block type annotation
@@ -77,7 +78,7 @@ public class TitleBlockHelper {
   public static boolean isTitleBlock(DAnnotation annotation) {
     return isDiagramTitleBlock(annotation) || isElementTitleBlock(annotation);
   }
-  
+
   /**
    * @param annotation
    * @return true if the annotation is a Title Block Line type annotation
@@ -109,13 +110,14 @@ public class TitleBlockHelper {
   }
 
   public static DAnnotation getDiagramTitleBlock(DDiagram diagram) {
-    Optional<DAnnotation> blockOpt = diagram.getEAnnotations().stream().filter(a -> a.getSource().equals(DIAGRAM_TITLE_BLOCK)).findFirst();
+    Optional<DAnnotation> blockOpt = diagram.getEAnnotations().stream()
+        .filter(a -> a.getSource().equals(DIAGRAM_TITLE_BLOCK)).findFirst();
     if (blockOpt.isPresent()) {
       return blockOpt.get();
     }
     return null;
   }
-  
+
   public static List<DAnnotation> getElementTitleBlocks(DDiagram diagram, EObject element) {
     return getElementTitleBlocks(diagram).stream().filter(block -> block.getReferences().contains(element))
         .collect(Collectors.toList());
@@ -144,7 +146,7 @@ public class TitleBlockHelper {
     }
     return cells;
   }
-  
+
   /**
    * 
    * @param container
@@ -183,7 +185,7 @@ public class TitleBlockHelper {
     }
     return null;
   }
-  
+
   /**
    * 
    * @param titleBlock
@@ -191,14 +193,14 @@ public class TitleBlockHelper {
    */
   public static EObject getSemanticElementReference(DAnnotation titleBlock) {
     if (titleBlock != null) {
-    List<EObject> modelElements = titleBlock.getReferences().stream()
-        .filter(x -> !(x instanceof DAnnotation)).collect(Collectors.toList());
-    if(!modelElements.isEmpty())
-      return modelElements.get(0);
+      List<EObject> modelElements = titleBlock.getReferences().stream().filter(x -> !(x instanceof DAnnotation))
+          .collect(Collectors.toList());
+      if (!modelElements.isEmpty())
+        return modelElements.get(0);
     }
     return null;
   }
-  
+
   /**
    * function that return the index of the column of a selected cell in a Title Block
    * 
@@ -219,14 +221,14 @@ public class TitleBlockHelper {
     }
     return -1;
   }
-  
+
   /**
    * function that return the index of the line of a selected cell in a Title Block
    * 
    * @param cell:
    *          the selected cell
    * @param titleBlock:
-   *          the container Title Block (which stores all  the lines + cols)
+   *          the container Title Block (which stores all the lines + cols)
    * @return
    */
   public static int getLineIndexOfCell(DAnnotation cell, DAnnotation titleBlock) {
@@ -238,7 +240,6 @@ public class TitleBlockHelper {
     }
     return -1;
   }
-  
 
   /**
    * Create a cell where with the settings from parameters
@@ -269,7 +270,8 @@ public class TitleBlockHelper {
   /**
    * Add new Title Block to diagram element
    * 
-   * @param diagram element
+   * @param diagram
+   *          element
    * @return the added Title Block
    */
   public static DAnnotation addElementTitleBlock(DDiagram diagram, DDiagramElement diagramElement) {
@@ -279,7 +281,7 @@ public class TitleBlockHelper {
     diagram.getEAnnotations().add(titleBLock);
     return titleBLock;
   }
-  
+
   /**
    * Add new Title Block to diagram
    * 
@@ -293,7 +295,7 @@ public class TitleBlockHelper {
     titleBlock.getReferences().add(line);
     return line;
   }
-  
+
   /**
    * Add new line to an existing Title Block in diagram to the given position
    * 
@@ -308,18 +310,17 @@ public class TitleBlockHelper {
     titleBlock.getReferences().add(position + 1, line);
     return line;
   }
-  
+
   /**
-   * Add new Title Block to diagram to the given position
-   * and create the columns in the line also
+   * Add new Title Block to diagram to the given position and create the columns in the line also
    * 
    * @param diagram
    * @return the added Title Block
    */
   public static DAnnotation addTitleBlockLine(DDiagram diagram, DAnnotation titleBlock, int position, int numCols) {
     DAnnotation line = addTitleBlockLine(diagram, titleBlock, position);
-    for(int i = 0; i < numCols; i++) {
-    	addTitleBlockCell(diagram, line, "", "");
+    for (int i = 0; i < numCols; i++) {
+      addTitleBlockCell(diagram, line, "", "");
     }
     return line;
   }
@@ -346,7 +347,8 @@ public class TitleBlockHelper {
    * @param diagram
    * @return the added Title Block
    */
-  public static DAnnotation addTitleBlockCell(DDiagram diagram, DAnnotation line, String name, String content, int position) {
+  public static DAnnotation addTitleBlockCell(DDiagram diagram, DAnnotation line, String name, String content,
+      int position) {
     DAnnotation cell = DescriptionFactory.eINSTANCE.createDAnnotation();
     cell.setSource(TITLE_BLOCK_CELL);
     cell.getDetails().put(NAME, name);
@@ -355,17 +357,17 @@ public class TitleBlockHelper {
     line.getReferences().add(position, cell);
     return cell;
   }
-  
+
   public static int getNumOfColumns(DAnnotation titleBlock) {
     DAnnotation firstLine = getTitleBlockLines(titleBlock).get(0);
     return getTitleBlockCells(firstLine).size();
   }
-  
+
   public static void setTitleBlockCellContent(DAnnotation line, String name, String content) {
     line.getDetails().put(NAME, name);
     line.getDetails().put(CONTENT, content);
   }
-  
+
   /**
    * 
    * @param target
@@ -378,14 +380,14 @@ public class TitleBlockHelper {
     // if is a Diagram Title Block, objToEvaluate will be the diagram
     if (objToEvaluate == null)
       objToEvaluate = diagram;
-    
+
     IInterpreterProvider provider = CompoundInterpreter.INSTANCE.getProviderForExpression(expression);
     IInterpreter interpreter = provider.createInterpreter();
     Object result = null;
     try {
       result = interpreter.evaluate(objToEvaluate, expression);
     } catch (EvaluationException e) {
-        return e;
+      return e;
     }
     return result;
   }
@@ -462,5 +464,32 @@ public class TitleBlockHelper {
       e.printStackTrace();
     }
 
-}
+  }
+  
+  public static List<DAnnotation> getAllAnnotationsForTitleBlock(DAnnotation titleBlock) {
+    List<DAnnotation> pieces = new ArrayList<>();
+    if (isTitleBlock(titleBlock)) {
+      for (EObject element : titleBlock.getReferences()) {
+        if (element instanceof DAnnotation && isTitleBlockLine((DAnnotation) element)) {
+          pieces.add((DAnnotation) element);
+          for(EObject elementCol : ((DAnnotation) element).getReferences()) {
+            if (elementCol instanceof DAnnotation) {
+              pieces.add((DAnnotation) elementCol);
+              for(EObject elementCel : ((DAnnotation) elementCol).getReferences()) {
+                if (elementCel instanceof DAnnotation) {
+                  pieces.add((DAnnotation) elementCel);
+                  for(EObject elementContent : ((DAnnotation) elementCel).getReferences()) {
+                    if (elementContent instanceof DAnnotation) {
+                      pieces.add((DAnnotation) elementContent);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return pieces;
+  }
 }
