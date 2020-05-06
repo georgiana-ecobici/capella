@@ -455,18 +455,26 @@ public class TitleBlockHelper {
           keyStroke, null);
       adapter.addContentProposalListener(new IContentProposalListener() {
         @Override
-        public void proposalAccepted(IContentProposal proposal) {
-          int posOfDot = textField.getText().lastIndexOf(".");
-          char charToAppend = '.';
-          if (posOfDot < 0) {
-            posOfDot = textField.getText().lastIndexOf(":");
-            charToAppend = ':';
+        public void proposalAccepted(IContentProposal proposal) {   
+          String proposalContent = proposal.getContent();
+          String textBeforeProposal = textField.getText(0, textField.getText().length() - proposalContent.length() - 1);
+          
+          StringBuffer patternToMatch = new StringBuffer();
+          int currentIndex = textBeforeProposal.length() - 1;
+          String matchedString = "";
+          
+          while (currentIndex >= 0 && patternToMatch.length() <= textBeforeProposal.length()) {
+            patternToMatch.reverse();
+            patternToMatch.append(textBeforeProposal.charAt(currentIndex));
+            patternToMatch.reverse();
+            
+            if (proposalContent.toLowerCase().startsWith(patternToMatch.toString().toLowerCase())) {
+              matchedString = patternToMatch.toString();
+            }
+            currentIndex--;
           }
-          StringBuilder text = new StringBuilder();
-          text = text.append(textField.getText().substring(0, posOfDot)).append(charToAppend)
-              .append(proposal.getContent());
-          textField.setText(text.toString());
-
+                      
+          textField.setText(textBeforeProposal.substring(0, textBeforeProposal.length() - matchedString.length()) + proposalContent);
           adapter.getControlContentAdapter().setCursorPosition(textField, textField.getText().length());
         }
       });
