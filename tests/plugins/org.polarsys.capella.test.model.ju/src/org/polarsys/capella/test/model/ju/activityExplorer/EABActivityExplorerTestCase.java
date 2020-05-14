@@ -51,17 +51,14 @@ public class EABActivityExplorerTestCase extends DiagramActivityExplorerTestCase
   }
 
   class MyNewEpbsArchitectureBlankAdapter extends NewEpbsArchitectureBlankAdapter {
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
 
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
       return getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session,
+          IDiagramNameConstants.EPBS_ARCHITECTURE_BLANK_DIAGRAM_NAME);
     }
 
   }

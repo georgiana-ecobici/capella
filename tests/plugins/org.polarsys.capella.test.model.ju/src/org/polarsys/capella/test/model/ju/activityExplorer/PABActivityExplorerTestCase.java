@@ -56,17 +56,14 @@ public class PABActivityExplorerTestCase extends DiagramActivityExplorerTestCase
   }
 
   class MyNewPhysicalArchitectureDiagramAdapter extends NewPhysicalArchitectureDiagramAdapter {
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
 
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
       return getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session,
+          IDiagramNameConstants.PHYSICAL_ARCHITECTURE_BLANK_DIAGRAM_NAME);
     }
 
   }

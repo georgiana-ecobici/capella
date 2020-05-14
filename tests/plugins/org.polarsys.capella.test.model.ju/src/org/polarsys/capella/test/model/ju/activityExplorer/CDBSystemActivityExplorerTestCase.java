@@ -15,6 +15,7 @@ import org.eclipse.sirius.business.api.session.Session;
 import org.polarsys.capella.common.data.modellingcore.ModelElement;
 import org.polarsys.capella.core.data.information.DataPkg;
 import org.polarsys.capella.core.explorer.activity.ui.hyperlinkadapter.sa.NewClassDiagramAdapter;
+import org.polarsys.capella.core.sirius.analysis.IDiagramNameConstants;
 
 public class CDBSystemActivityExplorerTestCase extends CDBActivityExplorerTestCase {
 
@@ -40,17 +41,12 @@ public class CDBSystemActivityExplorerTestCase extends CDBActivityExplorerTestCa
 
   class MyNewClassDiagramAdapter extends NewClassDiagramAdapter {
 
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
-
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
       return getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session, IDiagramNameConstants.CLASS_BLANK_DIAGRAM_NAME);
     }
   }
 

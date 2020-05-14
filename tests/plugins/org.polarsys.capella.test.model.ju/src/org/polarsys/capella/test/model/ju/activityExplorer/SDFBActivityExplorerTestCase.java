@@ -52,17 +52,13 @@ public class SDFBActivityExplorerTestCase extends FunctionalDiagramActivityExplo
 
   class MyNewBlankFunctionalDataflowDiagramAdapter extends NewBlankFunctionalDataflowDiagramAdapter {
 
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
-
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
       return getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session,
+          IDiagramNameConstants.SYSTEM_DATA_FLOW_BLANK_DIAGRAM_NAME);
     }
   }
 

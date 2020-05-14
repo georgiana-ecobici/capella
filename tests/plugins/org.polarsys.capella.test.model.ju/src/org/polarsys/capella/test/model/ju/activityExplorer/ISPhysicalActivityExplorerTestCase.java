@@ -52,17 +52,13 @@ public class ISPhysicalActivityExplorerTestCase extends FunctionalScenarioActivi
 
   class MyNewScenarioDiagramAdapter extends NewScenarioDiagramAdapter {
 
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
-
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
-      return (ModelElement) getModelElement(rootSemanticModel);
+      return getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session,
+          IDiagramNameConstants.INTERFACE_SCENARIO_DIAGRAM_NAME);
     }
   }
 
