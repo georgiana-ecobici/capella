@@ -52,17 +52,12 @@ public class ESPhysicalActivityExplorerTestCase extends FunctionalScenarioActivi
 
   class MyNewExchangeScenarioAdapter extends NewExchangeScenarioAdapter {
 
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
-
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
-      return (ModelElement) getModelElement(rootSemanticModel);
+      return getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session, getDiagramName());
     }
 
   }

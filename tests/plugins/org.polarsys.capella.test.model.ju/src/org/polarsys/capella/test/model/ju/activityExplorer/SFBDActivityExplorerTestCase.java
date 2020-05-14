@@ -51,17 +51,13 @@ public class SFBDActivityExplorerTestCase extends FunctionalDiagramActivityExplo
 
   class MyNewFunctionalBreakdownDiagramAdapter extends NewFunctionalBreakdownDiagramAdapter {
 
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
-
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
       return getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session,
+          IDiagramNameConstants.SYSTEM_FUNCTION_BREAKDOWN_DIAGRAM_NAME);
     }
   }
 

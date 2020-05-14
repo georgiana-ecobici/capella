@@ -41,17 +41,13 @@ public class ORBActivityExplorerTestCase extends DiagramActivityExplorerTestCase
 
   class MyNewRoleBlankDiagramAdapter extends NewRoleBlankDiagramAdapter {
 
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
-
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
       return (ModelElement) getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session,
+          IDiagramNameConstants.OPERATIONAL_ROLE_BLANK_DIAGRAM_NAME);
     }
   }
 }

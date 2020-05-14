@@ -52,17 +52,13 @@ public class OASActivityExplorerTestCase extends FunctionalScenarioActivityExplo
 
   class MyNewActivityScenarioAdapter extends NewActivityScenarioAdapter {
 
-    @Override
-    protected boolean useDefaultName() {
-      return true;
-    }
-
     public ModelElement getMyModelElement(EObject rootSemanticModel) {
       return (ModelElement) getModelElement(rootSemanticModel);
     }
 
     public boolean myCreateDiagram(final EObject project, final Session session) {
-      return createDiagram(project, session);
+      return ActivityExplorerHelper.createDiagram(project, session,
+          IDiagramNameConstants.OPERATIONAL_ACTIVITY_INTERACTION_SCENARIO_DIAGRAM_NAME);
     }
   }
 
