@@ -33,6 +33,7 @@ import org.eclipse.sirius.diagram.DEdge;
 import org.eclipse.sirius.diagram.DNodeContainer;
 import org.eclipse.sirius.diagram.DragAndDropTarget;
 import org.eclipse.sirius.diagram.business.api.helper.filter.FilterService;
+import org.eclipse.sirius.diagram.business.internal.metamodel.spec.DSemanticDiagramSpec;
 import org.eclipse.sirius.diagram.description.ContainerMapping;
 import org.eclipse.sirius.diagram.description.filter.FilterDescription;
 import org.eclipse.sirius.diagram.ui.business.api.helper.graphicalfilters.CompositeFilterApplicationBuilder;
@@ -826,23 +827,46 @@ public class TitleBlockServices {
    * @return String the label of the content cell
    */
   public EObject showHideTitleBlocks(final EObject elementView, List<EObject> selectedTypes, String type) {
+//    DDiagram diagram = CapellaServices.getService().getDiagramContainer(elementView);
+//
+//    Map<EObject, AbstractDNode> existingTypes = new HashMap<>();
+//    for (EObject currentContainer : DiagramServices.getDiagramServices().getAllContainersAndNodeLists(elementView)) {
+//      AbstractDNode aContainer = (AbstractDNode) currentContainer;
+//      if ((aContainer.getTarget() instanceof DAnnotation)) {
+//        DAnnotation annotation = (DAnnotation) aContainer.getTarget();
+//        if (annotation.getSource() != null && annotation.getSource().equals(type))
+//          existingTypes.put(aContainer.getTarget(), aContainer);
+//      }
+//    }
+//
+//    for (Entry<EObject, AbstractDNode> me : existingTypes.entrySet()) {
+//      if (!selectedTypes.contains(me.getKey())) {
+//        DiagramServices.getDiagramServices().removeContainerView(me.getValue());
+//      }
+//    }
+//    for (EObject aType : selectedTypes) {
+//      if (!existingTypes.containsKey(aType)) {
+//        createTitleBlockView((DAnnotation) aType, diagram, elementView);
+//        checkTitleBlocksFilters(diagram, type);
+//      }
+//    }
+//    return elementView;
+    
     DDiagram diagram = CapellaServices.getService().getDiagramContainer(elementView);
-
-    Map<EObject, AbstractDNode> existingTypes = new HashMap<>();
-    for (EObject currentContainer : DiagramServices.getDiagramServices().getAllContainersAndNodeLists(elementView)) {
-      AbstractDNode aContainer = (AbstractDNode) currentContainer;
-      if ((aContainer.getTarget() instanceof DAnnotation)) {
-        DAnnotation annotation = (DAnnotation) aContainer.getTarget();
-        if (annotation.getSource() != null && annotation.getSource().equals(type))
-          existingTypes.put(aContainer.getTarget(), aContainer);
+    
+    Map<DAnnotation, DAnnotation> existingTypes = new HashMap<>();
+    for (DAnnotation currentContainer : ((DSemanticDiagramSpec) elementView).getEAnnotations()) {
+      if (currentContainer.getSource() != null && currentContainer.getSource().equals(type)) {
+        existingTypes.put(currentContainer, currentContainer);
       }
     }
-
-    for (Entry<EObject, AbstractDNode> me : existingTypes.entrySet()) {
+    
+    for (Entry<DAnnotation, DAnnotation> me : existingTypes.entrySet()) {
       if (!selectedTypes.contains(me.getKey())) {
         DiagramServices.getDiagramServices().removeContainerView(me.getValue());
       }
     }
+
     for (EObject aType : selectedTypes) {
       if (!existingTypes.containsKey(aType)) {
         createTitleBlockView((DAnnotation) aType, diagram, elementView);
