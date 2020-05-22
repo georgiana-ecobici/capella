@@ -84,4 +84,10 @@ public class CreateDiagramTitleBlockTool extends CreateAbstractDNodeTool<DDiagra
     assertTrue(TitleBlockServices.getService().hasADiagramTitleBlock(getDiagramContext().getDiagram())
         && !TitleBlockServices.getService().getVisibleDiagramTitleBlocks(getDiagramContext().getDiagram()).isEmpty());
 }
+  
+  public void checkDidntCreate() {
+	super.contextOk();
+	assertFalse(TitleBlockServices.getService().hasADiagramTitleBlock(getDiagramContext().getDiagram())
+	        && !TitleBlockServices.getService().getVisibleDiagramTitleBlocks(getDiagramContext().getDiagram()).isEmpty());
+  }
 }
