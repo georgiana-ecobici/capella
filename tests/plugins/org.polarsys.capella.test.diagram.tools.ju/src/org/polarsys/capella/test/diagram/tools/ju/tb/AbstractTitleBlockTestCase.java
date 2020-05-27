@@ -53,9 +53,11 @@ public abstract class AbstractTitleBlockTestCase extends AbstractDiagramTestCase
 
     newDiagram.checkAutocreateDiagramTitleBlock();
     // create TB tools
+    // check that the Diagram TB wasn't created, even if the "default tb" from preferences is true
+    diagram.checkDidntCreateDiagramTitleBlock();
     DAnnotation diagramTB = diagram.createDiagramTitleBlock();
 
-    // show/hide tool + create TB after hide it
+    // show/hide tool + create TB after hide it 
     diagram.removeDiagramTitleBlock(diagramTB.getUid());
     diagram.checkCreateDiagramTitleBlock();
     diagram.insertDiagramTitleBlock(diagramTB.getUid());
